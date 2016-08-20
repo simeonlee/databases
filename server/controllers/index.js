@@ -1,9 +1,11 @@
-var models = require('../models');
+//var models = require('../models');
+var models = require('../models/index');
+// var controllersIndex = require('./index.js');
 
-var messages = [
+var dummyData = [
   {
     text: 'hello world',
-    username: 'fred',
+    username: 'robert',
     objectId: 0
   }
 ];
@@ -11,9 +13,17 @@ var messages = [
 module.exports = {
   messages: {
     get: function (req, res) {
-      res.send({results: messages});
+      models.messages.get(function(messages) {
+        messages = messages || dummyData;
+        res.send({results: messages});
+      });
     }, // a function which handles a get request for all messages
-    post: function (req, res) {} // a function which handles posting a message to the database
+    post: function (req, res) {
+      console.log('looking at body', req.body);
+      models.messages.post(req.body, function() {
+        // controllersIndex.messages.get(req, res);
+      });
+    } // a function which handles posting a message to the database
   },
 
   users: {

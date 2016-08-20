@@ -1,16 +1,28 @@
 // var db = require('../db');
-var dbConnection = require('./index');
+var controller = require('../controllers/index');
+var dbConnection = require('../index').dbConnection;
+//dbConnection.connect();
 module.exports = {
   messages: {
-    get: function (req, res) { // TODO: DO WE REMOVE REQ, RES?
-      res.send('----> You are in the models/index.js get request handler');
-    }, // a function which produces all the messages
-    post: function (req, res) { // TODO: DO WE REMOVE REQ, RES?
-      console.log(req.body);
-      var post = {timestamp: new Date(), text: req.body};
-      dbConnection.query('INSERT INTO messages SET ?', post, function(err, result) {
+    get: function (callback) { // TODO: DO WE REMOVE REQ, RES?
+      dbConnection.query('SELECT * FROM messages', function(err, result) {
         if (err) { throw err; }
+        callback(result);
       });
+    }, // a function which produces all the messages
+    post: function (post, callback) { // TODO: DO WE REMOVE REQ, RES?
+
+      post = post || {timestamp: new Date(), text: 'Hello world! :)'};
+      var messageData = {timestamp: new Date(), text: post.text};
+
+      // Upon load of client, we'll do a post request with just the username to the user table
+      // That can be configured by doing a check if the post data has a message or not
+
+      dbConnection.query('INSERT INTO messages SET ?', messageData, function(err, result) {
+        if (err) { throw err; }
+        callback();
+      });
+
     } // a function which can be used to insert a message into the database
   },
 
