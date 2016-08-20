@@ -11,8 +11,6 @@ CREATE TABLE messages (
   PRIMARY KEY (id), 
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (room_id) REFERENCES rooms(id)
-  /*MAKE REFERNCE TO USERS and ROOMS PRIMARY KEY LATER 
-  /* Describe your table here.*/
 );
 
 CREATE TABLE users (
@@ -26,7 +24,6 @@ CREATE TABLE rooms (
   name VARCHAR(200),
   PRIMARY KEY (id)
 );
-/* Create other tables and define schemas for them here! */
 
 
 

@@ -1,5 +1,5 @@
 var express = require('express');
-var db = require('./db');
+// var db = require('./db');
 
 // Middleware
 var morgan = require('morgan');
@@ -20,6 +20,10 @@ app.use(parser.json());
 
 // Set up our routes
 app.use('/classes', router);
+
+// app.get('/classes/messages', function(req, res) {
+//   res.send('hello world');
+// });
 
 // Serve the client files
 app.use(express.static(__dirname + '/../client'));
