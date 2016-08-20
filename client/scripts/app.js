@@ -4,7 +4,7 @@ var app = {
   //TODO: The current 'toggleFriend' function just toggles the class 'friend'
   //to all messages sent by the user
   // server: 'https://api.parse.com/1/classes/messages/',
-  server: 'http://127.0.0.1:3000/classes/messages/',
+  server: 'http://127.0.0.1:3000/classes',
   username: 'anonymous',
   roomname: 'lobby',
   lastMessageId: 0,
@@ -13,6 +13,8 @@ var app = {
   init: function() {
     // Get username
     app.username = window.location.search.substr(10);
+
+    app.sendUsername(app.username);
 
     // Cache jQuery selectors
     app.$message = $('#message');
@@ -29,8 +31,28 @@ var app = {
     app.startSpinner();
     app.fetch(false);
 
+
     // Poll for new messages
     setInterval(app.fetch, 3000);
+  },
+
+  sendUsername: function(data) {
+    // POST the username to the server
+    $.ajax({
+      url: app.server + '/users',
+      type: 'POST',
+      data: JSON.stringify({ username: data }),
+      contentType: 'application/json',
+      success: function (data) {
+        // Trigger a fetch to update the messages, pass true to animate
+        console.log(data);
+        console.log('Ajax posted username to server');
+        app.fetch();
+      },
+      error: function (data) {
+        console.error('chatterbox: Failed to send username', data);
+      }
+    });
   },
 
   send: function(data) {
@@ -40,7 +62,7 @@ var app = {
 
     // POST the message to the server
     $.ajax({
-      url: app.server,
+      url: app.server + '/messages',
       type: 'POST',
       data: JSON.stringify(data),
       contentType: 'application/json',
@@ -56,7 +78,7 @@ var app = {
 
   fetch: function(animate) {
     $.ajax({
-      url: app.server,
+      url: app.server + '/messages',
       type: 'GET',
       contentType: 'application/json',
       data: { order: '-createdAt'},
