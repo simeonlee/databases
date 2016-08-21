@@ -7,7 +7,7 @@ var mysql = require('mysql');
 dbConnection = mysql.createConnection({
   host: '127.0.0.1',
   user: 'root',
-  password: 'password',
+  password: 'marinara',
   database: 'chat'
 });
 
@@ -18,4 +18,4 @@ dbConnection.connect(function(err) {
   console.log('You are now connected to the "chats" database');
 });
 
-module.exports.dbConnection = dbConnection;
+module.exports = dbConnection;
